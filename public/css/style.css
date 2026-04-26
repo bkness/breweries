@@ -565,6 +565,7 @@ button.location-link {
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 12px;
   padding: 12px 12px 12px 12px;
+  background-color: rgba(255, 255, 255, 0.07);
   color: #f9fafb;
   font-size: 0.95rem;
   outline: none;
@@ -573,6 +574,12 @@ button.location-link {
 
 .form-input:focus {
   border-color: var(--accent-color);
+}
+
+.form-input:-webkit-autofill,
+.form-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #f9fafb;
+  -webkit-box-shadow: 0 0 0px 1000px #1e2a3a inset;
 }
 
 .form-group label {
