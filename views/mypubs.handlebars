@@ -33,7 +33,7 @@
             <h5 class='location'>{{brewery.city}}, {{brewery.state}} {{brewery.zipcode}}</h5>
             {{#if brewery.phone}}
               <h5 class='location'>
-                <a href='tel:+1{{brewery.phone}}'>{{brewery.phone}}</a>
+                <a href='tel:+1{{brewery.phone}}'>{{formatPhone brewery.phone}}</a>
               </h5>
             {{/if}}
             {{#if brewery.website}}

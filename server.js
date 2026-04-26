@@ -1,12 +1,12 @@
-const path = require("path");
-const express = require("express");
+const path = require('path');
+const express = require('express');
 // Import express-session
-const session = require("express-session");
-const exphbs = require("express-handlebars");
-const helpers = require("./utils/helpers");
-const routes = require("./controllers");
-const sequelize = require("./config/connection");
-const SequelizeStore = require("connect-session-sequelize")(session.Store);
+const session = require('express-session');
+const exphbs = require('express-handlebars');
+const helpers = require('./utils/helpers');
+const routes = require('./controllers');
+const sequelize = require('./config/connection');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -15,7 +15,7 @@ const hbs = exphbs.create({ helpers });
 
 // Set up sessions
 const sess = {
-  secret: "localbrew",
+  secret: process.env.SESSION_SECRET || 'localbrew',
   cookie: {
     maxAge: 2 * 60 * 60 * 1000, // 2 hours
   },
@@ -36,13 +36,13 @@ app.use((req, res, next) => {
   next();
 });
 
-app.engine("handlebars", hbs.engine);
-app.set("view engine", "handlebars");
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(routes);
 
 sequelize.sync({ force: false }).then(() => {
-  app.listen(PORT, () => console.log("Now listening"));
+  app.listen(PORT, () => console.log('Now listening'));
 });
