@@ -24,7 +24,7 @@
 
     <div class="brewery-grid">
       {{#each apiData as |brewery|}}
-        <div class="brewery-card" data-id="{{brewery.id}}">
+        <article class="brewery-card" data-id="{{brewery.id}}">
           <div class="card-top">
             <h3>{{brewery.name}}</h3>
             <span class="badge">{{brewery.brewery_type}}</span>
@@ -47,7 +47,7 @@
               {{#if (includes ../savedIds brewery.id)}}Saved ✓{{else}}⭐ Save{{/if}}
             </button>
           </div>
-        </div>
+        </article>
       {{/each}}
     </div>
 
