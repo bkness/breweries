@@ -6,7 +6,7 @@ let sequelize;
 if (process.env.USE_SQLITE === 'true') {
   sequelize = new Sequelize({
     dialect: 'sqlite',
-    storage: './database.sqlite',
+    storage: process.env.SQLITE_PATH || './database.sqlite',
     logging: false,
   });
 } else {
