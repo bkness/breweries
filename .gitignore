@@ -7,6 +7,9 @@ yarn.lock
 .env.local
 .env.*.local
 
+# Apple auth keys
+*.p8
+
 # SQLite database
 *.db
 *.sqlite
