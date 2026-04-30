@@ -12,11 +12,8 @@ router.get('/', async (req, res) => {
       savedIds = savedBreweries.map((brewery) => brewery.refid);
     }
 
-    const breweryData = await fetch('https://api.openbrewerydb.org/v1/breweries?by_city=phoenix');
-    const apiData = await breweryData.json();
-
     res.render('homepage', {
-      apiData,
+      apiData: [],
       savedIds,
       logged_in: req.session.logged_in,
     });

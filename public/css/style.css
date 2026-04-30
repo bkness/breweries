@@ -363,6 +363,14 @@ button.location-link {
   border-radius: 8px;
 }
 
+.geo-status {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  min-height: 1.2em;
+  text-align: center;
+}
+
 /* ======================
    CARDS / BREWERIES
 ====================== */
