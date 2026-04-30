@@ -171,24 +171,27 @@ function detectLocation() {
 
   navigator.geolocation.getCurrentPosition(
     async ({ coords }) => {
-      console.log('coords', coords);
+      console.log('Geolocation coordinates:', coords);
       try {
-        const res = await fetch(
-          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${coords.latitude}&longitude=${coords.longitude}&localityLanguage=en`
-        );
+        const apiUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${coords.latitude}&longitude=${coords.longitude}&localityLanguage=en`;
+        console.log('Reverse geocoding API URL:', apiUrl);
+        const res = await fetch(apiUrl);
         const data = await res.json();
-        const city = data.city || data.locality;
-        console.log('data', data, 'city', city);
+        console.log('Reverse geocoding API response:', data);
+        // Try to get city, then locality, then principalSubdivision, then countryName
+        const city = data.city || data.locality || data.principalSubdivision || data.countryName;
         if (!city) {
           if (statusEl) statusEl.textContent = 'Could not detect city.';
+          console.warn('No city/locality found in API response:', data);
           return;
         }
         if (statusEl) statusEl.textContent = `Detected: ${city}`;
         setTimeout(() => {
           window.location.href = `/search?city=${encodeURIComponent(city)}`;
         }, 1500);
-      } catch {
+      } catch (e) {
         if (statusEl) statusEl.textContent = '';
+        console.error('Error during reverse geocoding:', e);
       }
     },
     (err) => {
@@ -198,6 +201,7 @@ function detectLocation() {
         3: 'Location request timed out — try again.',
       };
       if (statusEl) statusEl.textContent = messages[err.code] || 'Could not determine location.';
+      console.error('Geolocation error:', err);
     },
     { timeout: 10000 }
   );
