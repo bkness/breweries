@@ -187,9 +187,14 @@ function detectLocation() {
       }
     },
     (err) => {
-      if (statusEl) statusEl.textContent = err.code === 1 ? 'Location access denied.' : 'Could not determine location.';
+      const messages = {
+        1: 'Location access denied.',
+        2: 'Location temporarily unavailable — try again.',
+        3: 'Location request timed out — try again.',
+      };
+      if (statusEl) statusEl.textContent = messages[err.code] || 'Could not determine location.';
     },
-    { timeout: 8000 }
+    { timeout: 10000, enableHighAccuracy: true }
   );
 }
 
