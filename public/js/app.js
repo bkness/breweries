@@ -194,7 +194,7 @@ function detectLocation() {
       };
       if (statusEl) statusEl.textContent = messages[err.code] || 'Could not determine location.';
     },
-    { timeout: 10000, enableHighAccuracy: true }
+    { timeout: 10000 }
   );
 }
 
