@@ -126,9 +126,8 @@ function init() {
   const closeMapBtn = document.getElementById('close-map');
   if (closeMapBtn) closeMapBtn.addEventListener('click', closeModal);
 
-  if (document.getElementById('geo-status') && !document.querySelector('.results-section')) {
-    detectLocation();
-  }
+  const geoBtn = document.getElementById('geo-btn');
+  if (geoBtn) geoBtn.addEventListener('click', detectLocation);
 
   // Comment submit button
   const commentBtn = document.querySelector('#pubcommentsubmit');
@@ -187,8 +186,8 @@ function detectLocation() {
         if (statusEl) statusEl.textContent = '';
       }
     },
-    () => {
-      if (statusEl) statusEl.textContent = '';
+    (err) => {
+      if (statusEl) statusEl.textContent = err.code === 1 ? 'Location access denied.' : 'Could not determine location.';
     },
     { timeout: 8000 }
   );

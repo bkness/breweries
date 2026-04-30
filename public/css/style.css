@@ -371,6 +371,21 @@ button.location-link {
   padding: 2rem 0 1rem;
 }
 
+.pagination a.btn {
+  background-color: var(--color-accent, #e8a14e);
+  color: #1a1a2e;
+  border: none;
+  font-weight: 600;
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.pagination a.btn:hover {
+  opacity: 0.85;
+}
+
 .pagination-info {
   font-size: 0.9rem;
   opacity: 0.8;
@@ -380,6 +395,22 @@ button.location-link {
   opacity: 0.35;
   pointer-events: none;
   cursor: default;
+}
+
+.btn-geo {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-geo:hover {
+  border-color: rgba(255, 255, 255, 0.7);
+  color: #fff;
 }
 
 .geo-status {

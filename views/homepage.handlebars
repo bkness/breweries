@@ -18,6 +18,7 @@
         </div>
 
         <button type="submit" class="btn btn-accent" id="search-btn">Search</button>
+        <button type="button" class="btn btn-geo" id="geo-btn" title="Find breweries near me">&#x2316; Use My Location</button>
       </form>
       <p id="geo-status" class="geo-status"></p>
     </div>
@@ -137,16 +138,12 @@
   <div class="pagination">
     {{#if hasPrev}}
     <a href="/search?{{searchParams}}&page={{prevPage}}" class="btn btn-sm btn-outline-primary">← Prev</a>
-    {{else}}
-    <span class="btn btn-sm btn-outline-primary disabled">← Prev</span>
     {{/if}}
 
     <span class="pagination-info">Page {{currentPage}} of {{totalPages}}</span>
 
     {{#if hasNext}}
     <a href="/search?{{searchParams}}&page={{nextPage}}" class="btn btn-sm btn-outline-primary">Next →</a>
-    {{else}}
-    <span class="btn btn-sm btn-outline-primary disabled">Next →</span>
     {{/if}}
   </div>
   {{/if}}
