@@ -363,6 +363,25 @@ button.location-link {
   border-radius: 8px;
 }
 
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem 0 1rem;
+}
+
+.pagination-info {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.pagination .disabled {
+  opacity: 0.35;
+  pointer-events: none;
+  cursor: default;
+}
+
 .geo-status {
   margin-top: 0.5rem;
   font-size: 0.85rem;

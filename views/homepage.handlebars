@@ -133,6 +133,24 @@
   </div>
   </div>
 
+  {{#if showPagination}}
+  <div class="pagination">
+    {{#if hasPrev}}
+    <a href="/search?{{searchParams}}&page={{prevPage}}" class="btn btn-sm btn-outline-primary">← Prev</a>
+    {{else}}
+    <span class="btn btn-sm btn-outline-primary disabled">← Prev</span>
+    {{/if}}
+
+    <span class="pagination-info">Page {{currentPage}} of {{totalPages}}</span>
+
+    {{#if hasNext}}
+    <a href="/search?{{searchParams}}&page={{nextPage}}" class="btn btn-sm btn-outline-primary">Next →</a>
+    {{else}}
+    <span class="btn btn-sm btn-outline-primary disabled">Next →</span>
+    {{/if}}
+  </div>
+  {{/if}}
+
 </section>
 {{/if}}
 
