@@ -29,7 +29,7 @@ router.get('/', withAuth, async (req, res) => {
 });
 
 // GET one breweries
-router.get('/singlebrewery/:id', async (req, res) => {
+router.get('/singlebrewery/:id', withAuth, async (req, res) => {
   try {
     const brewData = await Breweries.findByPk(req.params.id, {
       include: [
