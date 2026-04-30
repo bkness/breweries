@@ -15,15 +15,12 @@ router.get('/', async (req, res) => {
     const breweryData = await fetch('https://api.openbrewerydb.org/v1/breweries?by_city=phoenix');
     const apiData = await breweryData.json();
 
-    console.log(apiData);
-
     res.render('homepage', {
       apiData,
       savedIds,
       logged_in: req.session.logged_in,
     });
   } catch (err) {
-    console.log(err.message);
     res.status(500).json(err.message);
   }
 });
@@ -50,15 +47,12 @@ router.get('/search', async (req, res) => {
     const response = await fetch(query);
     const apiData = await response.json();
 
-    console.log(apiData);
-
     res.render('homepage', {
       apiData,
       savedIds,
       logged_in: req.session.logged_in,
     });
   } catch (err) {
-    console.log(err.message);
     res.status(500).json(err.message);
   }
 });
