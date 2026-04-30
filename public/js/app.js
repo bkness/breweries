@@ -126,6 +126,10 @@ function init() {
   const closeMapBtn = document.getElementById('close-map');
   if (closeMapBtn) closeMapBtn.addEventListener('click', closeModal);
 
+  if (document.getElementById('geo-status') && !document.querySelector('.results-section')) {
+    detectLocation();
+  }
+
   // Comment submit button
   const commentBtn = document.querySelector('#pubcommentsubmit');
   if (commentBtn) commentBtn.addEventListener('click', submitComment);
@@ -155,6 +159,39 @@ function handleEscape(e) {
     closeModal();
     closeSavedMap();
   }
+}
+
+// ======================
+// GEOLOCATION
+// ======================
+function detectLocation() {
+  const statusEl = document.getElementById('geo-status');
+  if (!navigator.geolocation) return;
+
+  if (statusEl) statusEl.textContent = 'Detecting your location...';
+
+  navigator.geolocation.getCurrentPosition(
+    async ({ coords }) => {
+      try {
+        const res = await fetch(
+          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${coords.latitude}&longitude=${coords.longitude}&localityLanguage=en`
+        );
+        const data = await res.json();
+        const city = data.city || data.locality;
+        if (!city) {
+          if (statusEl) statusEl.textContent = '';
+          return;
+        }
+        window.location.href = `/search?city=${encodeURIComponent(city)}`;
+      } catch {
+        if (statusEl) statusEl.textContent = '';
+      }
+    },
+    () => {
+      if (statusEl) statusEl.textContent = '';
+    },
+    { timeout: 8000 }
+  );
 }
 
 // ======================
