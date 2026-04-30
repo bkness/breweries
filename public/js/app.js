@@ -178,17 +178,43 @@ function detectLocation() {
         const res = await fetch(apiUrl);
         const data = await res.json();
         console.log('Full reverse geocoding API response:', data);
-        // Prefer city and state for search, fall back to state or country for broader search
-        const city = data.city || data.locality || '';
+        // Refined location selection: prefer city, then locality if not a landmark, then state, then country
+        const city = data.city || '';
         const state = data.principalSubdivision || data.state || '';
         const country = data.countryName || '';
+        let locality = data.locality || '';
+        // Avoid using locality if it looks like a landmark (e.g., contains 'Mountain', 'Park', etc.)
+        const landmarkKeywords = [
+          'Mountain',
+          'Park',
+          'Lake',
+          'Forest',
+          'Peak',
+          'Hill',
+          'Canyon',
+          'Valley',
+          'Creek',
+          'River',
+          'Mesa',
+          'Butte',
+          'Ridge',
+          'Point',
+          'Trail',
+        ];
+        if (locality && landmarkKeywords.some((word) => locality.includes(word))) {
+          locality = '';
+        }
         let searchQuery = '';
         if (city && state) {
           searchQuery = `${city}, ${state}`;
-        } else if (state) {
-          searchQuery = state;
         } else if (city) {
           searchQuery = city;
+        } else if (locality && state) {
+          searchQuery = `${locality}, ${state}`;
+        } else if (locality) {
+          searchQuery = locality;
+        } else if (state) {
+          searchQuery = state;
         } else if (country) {
           searchQuery = country;
         }
@@ -199,6 +225,7 @@ function detectLocation() {
         }
         if (statusEl) statusEl.textContent = `Detected: ${searchQuery}`;
         setTimeout(() => {
+          console.log('Redirecting to search with:', searchQuery);
           window.location.href = `/search?city=${encodeURIComponent(searchQuery)}`;
         }, 3000); // Give user more time to see the result
       } catch (e) {
