@@ -178,10 +178,13 @@ function detectLocation() {
         const data = await res.json();
         const city = data.city || data.locality;
         if (!city) {
-          if (statusEl) statusEl.textContent = '';
+          if (statusEl) statusEl.textContent = 'Could not detect city.';
           return;
         }
-        window.location.href = `/search?city=${encodeURIComponent(city)}`;
+        if (statusEl) statusEl.textContent = `Detected: ${city}`;
+        setTimeout(() => {
+          window.location.href = `/search?city=${encodeURIComponent(city)}`;
+        }, 1500);
       } catch {
         if (statusEl) statusEl.textContent = '';
       }
