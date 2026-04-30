@@ -178,28 +178,29 @@ function detectLocation() {
         const res = await fetch(apiUrl);
         const data = await res.json();
         console.log('Full reverse geocoding API response:', data);
-        // Prefer city and state for search
+        // Prefer city and state for search, fall back to state or country for broader search
         const city = data.city || data.locality || '';
         const state = data.principalSubdivision || data.state || '';
+        const country = data.countryName || '';
         let searchQuery = '';
         if (city && state) {
           searchQuery = `${city}, ${state}`;
-        } else if (city) {
-          searchQuery = city;
         } else if (state) {
           searchQuery = state;
-        } else {
-          searchQuery = data.countryName || '';
+        } else if (city) {
+          searchQuery = city;
+        } else if (country) {
+          searchQuery = country;
         }
         if (!searchQuery) {
-          if (statusEl) statusEl.textContent = 'Could not detect city.';
-          console.warn('No city/state found in API response:', data);
+          if (statusEl) statusEl.textContent = 'Could not detect location.';
+          console.warn('No city/state/country found in API response:', data);
           return;
         }
         if (statusEl) statusEl.textContent = `Detected: ${searchQuery}`;
         setTimeout(() => {
           window.location.href = `/search?city=${encodeURIComponent(searchQuery)}`;
-        }, 1500);
+        }, 3000); // Give user more time to see the result
       } catch (e) {
         if (statusEl) statusEl.textContent = '';
         console.error('Error during reverse geocoding:', e);
