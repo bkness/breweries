@@ -23,7 +23,6 @@ router.get('/', withAuth, async (req, res) => {
       logged_in: true,
     });
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -50,15 +49,11 @@ router.get('/singlebrewery/:id', withAuth, async (req, res) => {
       logged_in: true,
     });
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 });
 
 router.post('/addbrewery/', withAuth, async (req, res) => {
-  console.log('in post');
-  console.log(req.body);
-
   try {
     const dbbrewData = await Breweries.create({
       refid: req.body.refid,
@@ -78,7 +73,6 @@ router.post('/addbrewery/', withAuth, async (req, res) => {
     });
     res.status(200).json(dbbrewData);
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -104,7 +98,6 @@ router.put('/:id', withAuth, (req, res) => {
       return res.status(200).json({ message: 'Comment updated', affectedRows });
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).json(err);
     });
 });
