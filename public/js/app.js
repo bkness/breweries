@@ -126,9 +126,6 @@ function init() {
   const closeMapBtn = document.getElementById('close-map');
   if (closeMapBtn) closeMapBtn.addEventListener('click', closeModal);
 
-  const geoBtn = document.getElementById('geo-btn');
-  if (geoBtn) geoBtn.addEventListener('click', detectLocation);
-
   // Comment submit button
   const commentBtn = document.querySelector('#pubcommentsubmit');
   if (commentBtn) commentBtn.addEventListener('click', submitComment);
@@ -158,92 +155,6 @@ function handleEscape(e) {
     closeModal();
     closeSavedMap();
   }
-}
-
-// ======================
-// GEOLOCATION
-// ======================
-function detectLocation() {
-  const statusEl = document.getElementById('geo-status');
-  if (!navigator.geolocation) return;
-
-  if (statusEl) statusEl.textContent = 'Detecting your location...';
-
-  navigator.geolocation.getCurrentPosition(
-    async ({ coords }) => {
-      console.log('Geolocation coordinates:', coords);
-      try {
-        const apiUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${coords.latitude}&longitude=${coords.longitude}&localityLanguage=en`;
-        console.log('Reverse geocoding API URL:', apiUrl);
-        const res = await fetch(apiUrl);
-        const data = await res.json();
-        console.log('Full reverse geocoding API response:', data);
-        // Refined location selection: prefer city, then locality if not a landmark, then state, then country
-        const city = data.city || '';
-        const state = data.principalSubdivision || data.state || '';
-        const country = data.countryName || '';
-        let locality = data.locality || '';
-        // Avoid using locality if it looks like a landmark (e.g., contains 'Mountain', 'Park', etc.)
-        const landmarkKeywords = [
-          'Mountain',
-          'Park',
-          'Lake',
-          'Forest',
-          'Peak',
-          'Hill',
-          'Canyon',
-          'Valley',
-          'Creek',
-          'River',
-          'Mesa',
-          'Butte',
-          'Ridge',
-          'Point',
-          'Trail',
-        ];
-        if (locality && landmarkKeywords.some((word) => locality.includes(word))) {
-          locality = '';
-        }
-        let searchQuery = '';
-        if (city && state) {
-          searchQuery = `${city}, ${state}`;
-        } else if (city) {
-          searchQuery = city;
-        } else if (locality && state) {
-          searchQuery = `${locality}, ${state}`;
-        } else if (locality) {
-          searchQuery = locality;
-        } else if (state) {
-          searchQuery = state;
-        } else if (country) {
-          searchQuery = country;
-        }
-        if (!searchQuery) {
-          if (statusEl) statusEl.textContent = 'Could not detect location.';
-          console.warn('No city/state/country found in API response:', data);
-          return;
-        }
-        if (statusEl) statusEl.textContent = `Detected: ${searchQuery}`;
-        setTimeout(() => {
-          console.log('Redirecting to search with:', searchQuery);
-          window.location.href = `/search?city=${encodeURIComponent(searchQuery)}`;
-        }, 3000); // Give user more time to see the result
-      } catch (e) {
-        if (statusEl) statusEl.textContent = '';
-        console.error('Error during reverse geocoding:', e);
-      }
-    },
-    (err) => {
-      const messages = {
-        1: 'Location access denied.',
-        2: 'Location temporarily unavailable — try again.',
-        3: 'Location request timed out — try again.',
-      };
-      if (statusEl) statusEl.textContent = messages[err.code] || 'Could not determine location.';
-      console.error('Geolocation error:', err);
-    },
-    { timeout: 10000 }
-  );
 }
 
 // ======================
