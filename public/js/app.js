@@ -171,12 +171,14 @@ function detectLocation() {
 
   navigator.geolocation.getCurrentPosition(
     async ({ coords }) => {
+      console.log('coords', coords);
       try {
         const res = await fetch(
           `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${coords.latitude}&longitude=${coords.longitude}&localityLanguage=en`
         );
         const data = await res.json();
         const city = data.city || data.locality;
+        console.log('data', data, 'city', city);
         if (!city) {
           if (statusEl) statusEl.textContent = 'Could not detect city.';
           return;
