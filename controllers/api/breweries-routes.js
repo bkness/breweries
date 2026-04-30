@@ -17,7 +17,6 @@ router.get('/', withAuth, async (req, res) => {
     });
 
     const breweries = brewData.map((brewery) => brewery.get({ plain: true }));
-    //res.json(breweries);
     res.render('mypubs', {
       breweries,
       logged_in: true,
@@ -43,7 +42,6 @@ router.get('/singlebrewery/:id', withAuth, async (req, res) => {
     }
 
     const brewery = brewData.get({ plain: true });
-    //res.json(brewery);
     res.render('mypubscomment', {
       brewery,
       logged_in: true,
@@ -79,7 +77,6 @@ router.post('/addbrewery/', withAuth, async (req, res) => {
 
 // Updates breweries comment on its id
 router.put('/:id', withAuth, (req, res) => {
-  //Calls the update method on the Book model
   Breweries.update(
     {
       comments: req.body.comment,
