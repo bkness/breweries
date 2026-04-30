@@ -24,7 +24,9 @@ router.get('/', async (req, res) => {
 
 router.get('/search', async (req, res) => {
   try {
-    const { city, state, name } = req.query;
+    const { city, state, name, page } = req.query;
+    const currentPage = Math.max(1, parseInt(page) || 1);
+    const perPage = 10;
     let savedIds = [];
 
     if (req.session.logged_in && req.session.user_id) {
@@ -35,19 +37,39 @@ router.get('/search', async (req, res) => {
       savedIds = savedBreweries.map((brewery) => brewery.refid);
     }
 
-    let query = 'https://api.openbrewerydb.org/v1/breweries?';
+    const filters = new URLSearchParams();
+    if (city) filters.set('by_city', city);
+    if (state) filters.set('by_state', state);
+    if (name) filters.set('by_name', name);
+    const filterStr = filters.toString();
 
-    if (city) query += `by_city=${encodeURIComponent(city)}&`;
-    if (state) query += `by_state=${encodeURIComponent(state)}&`;
-    if (name) query += `by_name=${encodeURIComponent(name)}&`;
+    const [response, metaResponse] = await Promise.all([
+      fetch(`https://api.openbrewerydb.org/v1/breweries?${filterStr}&per_page=${perPage}&page=${currentPage}`),
+      fetch(`https://api.openbrewerydb.org/v1/breweries/meta?${filterStr}`),
+    ]);
 
-    const response = await fetch(query);
     const apiData = await response.json();
+    const meta = await metaResponse.json();
+    const totalPages = Math.ceil(parseInt(meta.total) / perPage) || 1;
+
+    const searchParams = new URLSearchParams();
+    if (city) searchParams.set('city', city);
+    if (state) searchParams.set('state', state);
+    if (name) searchParams.set('name', name);
+    const searchParamsStr = searchParams.toString();
 
     res.render('homepage', {
       apiData,
       savedIds,
       logged_in: req.session.logged_in,
+      currentPage,
+      totalPages,
+      hasPrev: currentPage > 1,
+      hasNext: currentPage < totalPages,
+      prevPage: currentPage - 1,
+      nextPage: currentPage + 1,
+      searchParams: searchParamsStr,
+      showPagination: totalPages > 1,
     });
   } catch (err) {
     res.status(500).json(err.message);
