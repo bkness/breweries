@@ -177,17 +177,28 @@ function detectLocation() {
         console.log('Reverse geocoding API URL:', apiUrl);
         const res = await fetch(apiUrl);
         const data = await res.json();
-        console.log('Reverse geocoding API response:', data);
-        // Try to get city, then locality, then principalSubdivision, then countryName
-        const city = data.city || data.locality || data.principalSubdivision || data.countryName;
-        if (!city) {
+        console.log('Full reverse geocoding API response:', data);
+        // Prefer city and state for search
+        const city = data.city || data.locality || '';
+        const state = data.principalSubdivision || data.state || '';
+        let searchQuery = '';
+        if (city && state) {
+          searchQuery = `${city}, ${state}`;
+        } else if (city) {
+          searchQuery = city;
+        } else if (state) {
+          searchQuery = state;
+        } else {
+          searchQuery = data.countryName || '';
+        }
+        if (!searchQuery) {
           if (statusEl) statusEl.textContent = 'Could not detect city.';
-          console.warn('No city/locality found in API response:', data);
+          console.warn('No city/state found in API response:', data);
           return;
         }
-        if (statusEl) statusEl.textContent = `Detected: ${city}`;
+        if (statusEl) statusEl.textContent = `Detected: ${searchQuery}`;
         setTimeout(() => {
-          window.location.href = `/search?city=${encodeURIComponent(city)}`;
+          window.location.href = `/search?city=${encodeURIComponent(searchQuery)}`;
         }, 1500);
       } catch (e) {
         if (statusEl) statusEl.textContent = '';
