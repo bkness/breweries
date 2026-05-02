@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "copy:bootstrap": "mkdir -p public/lib/bootstrap && cp -R node_modules/bootstrap/dist/* public/lib/bootstrap/",
-    "postinstall": "npm run copy:bootstrap",
+    "rebuild:sqlite3": "node -e \"if(process.platform==='darwin'){require('child_process').execSync('cd node_modules/sqlite3 && npx node-gyp rebuild',{stdio:'inherit'})}\"",
+    "postinstall": "npm run copy:bootstrap && npm run rebuild:sqlite3",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "dev": "concurrently \"nodemon --watch . --ext js,handlebars --exec node server.js\" \"browser-sync start --proxy 'localhost:3001' --files 'public/**/*, views/**/*' --no-open --no-ui --port 3000\""
@@ -28,7 +29,7 @@
     "jquery": "^3.7.1",
     "mysql2": "^3.6.5",
     "sequelize": "^6.37.8",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^6.0.1"
   },
   "overrides": {
     "validator": "^13.12.0",

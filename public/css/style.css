@@ -278,6 +278,7 @@ a.navbar-brand {
 .btn-accent {
   background: var(--accent-color);
   color: #fff;
+  border: none;
 }
 
 #search-btn {
@@ -285,7 +286,9 @@ a.navbar-brand {
 }
 
 .btn-accent:hover {
-  transform: scale(1.05);
+  background: #e8924d;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(244, 162, 97, 0.35);
 }
 
 button.location-link {
@@ -346,21 +349,53 @@ button.location-link {
 .search-form {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
+}
+
+.search-form input,
+.search-form .custom-inputs {
+  flex: 1;
+  min-width: 140px;
 }
 
 .search-form input {
-  flex: 1;
-  border: 2px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 10px;
   padding: 0 14px;
   height: 48px;
-  width: 100%;
   font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.06);
+  color: #f9fafb;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.search-form input::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.search-form input:focus {
+  border-color: var(--accent-color);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 3px rgba(244, 162, 97, 0.15);
+}
+
+.search-form .custom-select-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
 }
 
 .search-form button {
-  border-radius: 8px;
+  border-radius: 10px;
+  height: 48px;
+  padding: 0 20px;
+  white-space: nowrap;
 }
 
 .pagination {
@@ -368,27 +403,37 @@ button.location-link {
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  padding: 2rem 0 1rem;
+  padding: 2rem 0 1.5rem;
+  position: relative;
+  z-index: 10;
 }
 
-.pagination a.btn {
-  background-color: var(--color-accent, #e8a14e);
+.pagination-btn {
+  background: var(--accent-color);
   color: #1a1a2e;
   border: none;
   font-weight: 600;
-  padding: 0.4rem 1rem;
-  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
   text-decoration: none;
-  transition: opacity 0.2s;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.pagination a.btn:hover {
-  opacity: 0.85;
+.pagination-btn:hover {
+  background: #e8924d;
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(244, 162, 97, 0.35);
 }
 
 .pagination-info {
   font-size: 0.9rem;
-  opacity: 0.8;
+  opacity: 0.75;
+  color: #f9fafb;
 }
 
 .pagination .disabled {
@@ -552,42 +597,48 @@ button.location-link {
 
 .auth-form {
   background: var(--card-bg);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
-  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 2rem 1.75rem;
   min-width: 280px;
   max-width: 360px;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.1rem;
   box-shadow:
-    0 12px 24px rgba(0, 0, 0, 0.22),
-    0 0 20px var(--blue, rgba(154, 179, 245, 0.12));
+    0 12px 28px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
   transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .auth-form:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
   box-shadow:
-    0 20px 36px rgba(0, 0, 0, 0.3),
-    0 0 28px var(--blue, rgba(154, 179, 245, 0.25));
+    0 20px 40px rgba(0, 0, 0, 0.35),
+    0 0 24px rgba(154, 179, 245, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset;
 }
 
 .form-title {
   font-family: var(--font-secondary);
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   text-align: center;
   color: var(--accent-color);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.3px;
 }
 
 .error-message {
   color: #ff6b6b;
-  font-size: 0.875rem;
+  font-size: 0.82rem;
   min-height: 18px;
   text-align: center;
+  background: rgba(255, 107, 107, 0.08);
+  border-radius: 6px;
+  padding: 0 6px;
+  transition: opacity 0.2s ease;
 }
 
 .form-group {
@@ -597,18 +648,24 @@ button.location-link {
 }
 
 .form-input {
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 12px;
-  padding: 12px 12px 12px 12px;
-  background-color: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 10px;
+  padding: 13px 14px;
+  background-color: rgba(255, 255, 255, 0.06);
   color: #f9fafb;
   font-size: 0.95rem;
   outline: none;
-  transition: border-color 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+  width: 100%;
 }
 
 .form-input:focus {
   border-color: var(--accent-color);
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 3px rgba(244, 162, 97, 0.15);
 }
 
 .form-input:-webkit-autofill,
@@ -619,22 +676,25 @@ button.location-link {
 
 .form-group label {
   position: absolute;
-  left: 12px;
-  top: 12px;
+  left: 14px;
+  top: 13px;
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.5);
   pointer-events: none;
   transition: 0.2s ease all;
 }
 
 .form-input:focus + label,
 .form-input:not(:placeholder-shown) + label {
-  top: -8px;
-  left: 8px;
-  font-size: 0.75rem;
+  top: -9px;
+  left: 10px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
   color: var(--accent-color);
   background: var(--card-bg);
-  padding: 0 4px;
+  padding: 0 5px;
+  border-radius: 3px;
 }
 
 .custom-select {
@@ -702,10 +762,9 @@ button.location-link {
   transition: all 0.2s ease;
 }
 
-.btn-accent:hover,
-.btn-success:hover,
-.btn-primary:hover {
-  transform: scale(1.03);
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(40, 167, 69, 0.35);
 }
 
 /* ======================
