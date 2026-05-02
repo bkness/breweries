@@ -2,7 +2,7 @@
 const enterreview = async (event) => {
     event.preventDefault();
   
-    const brew_id = document.querySelector('#brewid').innerHTML;
+    const brew_id = document.querySelector('#brewid').value;
     const comment = document.querySelector('#pubcomment').value.trim();
   
     if (comment && brew_id) {
@@ -23,7 +23,7 @@ const enterreview = async (event) => {
   const deletebrewert = async (event) => {
     event.preventDefault();
   
-    const brew_id = document.querySelector('#brewid').innerHTML;
+    const brew_id = document.querySelector('#brewid').value;
   
     if (brew_id) {
       const response = await fetch(`/api/breweries/${brew_id}`, {

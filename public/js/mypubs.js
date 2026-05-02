@@ -2,10 +2,10 @@ document.addEventListener("click", async (e) => {
   const deleteBtn = e.target.closest(".btn-delete-brewery");
   const mapBtn = e.target.closest(".btn-map-saved");
   const closeBtn = e.target.closest("#close-mypubs-map");
-  //   const modal = document.getElementById("mypubs-map-modal");
+  const modal = document.getElementById("mypubs-map-modal");
 
   if (deleteBtn) {
-    const brewid = deleteBtn.getAttribute("data-index");
+    const brewid = deleteBtn.getAttribute("data-id");
     const breurl = `/api/breweries/${brewid}`;
 
     const response = await fetch(breurl, {
