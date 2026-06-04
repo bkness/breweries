@@ -66,6 +66,14 @@ const TOTAL_BG_IMAGES = 23;
 document.addEventListener('DOMContentLoaded', () => {
   loadBackgroundGrid();
   init();
+
+  const navbar = document.querySelector('.navbar');
+  let lastY = 0;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    navbar?.classList.toggle('nav-hidden', y > lastY && y > 60);
+    lastY = y;
+  }, { passive: true });
 });
 
 // ======================
@@ -126,13 +134,6 @@ function init() {
   const closeMapBtn = document.getElementById('close-map');
   if (closeMapBtn) closeMapBtn.addEventListener('click', closeModal);
 
-  // Comment submit button
-  const commentBtn = document.querySelector('#pubcommentsubmit');
-  if (commentBtn) commentBtn.addEventListener('click', submitComment);
-
-  // Single brewery delete button
-  const deleteBtn = document.querySelector('#deletebrewery');
-  if (deleteBtn) deleteBtn.addEventListener('click', deleteBreweryById);
 }
 
 async function parseApiError(res, fallbackMessage) {
@@ -513,34 +514,6 @@ async function deleteBrewery(id) {
   });
   if (res.ok) window.location.replace('/api/breweries');
   else showToast('Failed to delete brewery');
-}
-
-// ======================
-// SINGLE PAGE DELETE
-// ======================
-async function deleteBreweryById(e) {
-  e.preventDefault();
-  const brew_id = document.querySelector('#brewid')?.value;
-  if (!brew_id) return;
-  await deleteBrewery(brew_id);
-}
-
-// ======================
-// COMMENT
-// ======================
-async function submitComment(e) {
-  e.preventDefault();
-  const brew_id = document.querySelector('#brewid')?.value;
-  const comment = document.querySelector('#pubcomment')?.value.trim();
-  if (!brew_id || !comment) return;
-
-  const res = await fetch(`/api/breweries/${brew_id}`, {
-    method: 'PUT',
-    body: JSON.stringify({ comment }),
-    headers: { 'Content-Type': 'application/json' },
-  });
-  if (res.ok) window.location.replace('/api/breweries');
-  else showToast('Failed to add comment');
 }
 
 // ======================

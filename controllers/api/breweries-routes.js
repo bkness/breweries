@@ -26,33 +26,14 @@ router.get('/', withAuth, async (req, res) => {
   }
 });
 
-// GET one breweries
-router.get('/singlebrewery/:id', withAuth, async (req, res) => {
-  try {
-    const brewData = await Breweries.findByPk(req.params.id, {
-      include: [
-        {
-          model: User,
-        },
-      ],
-    });
-
-    if (!brewData) {
-      return res.status(404).json({ message: 'No brewery found with that id!' });
-    }
-
-    const brewery = brewData.get({ plain: true });
-    res.render('mypubscomment', {
-      brewery,
-      logged_in: true,
-    });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
 
 router.post('/addbrewery/', withAuth, async (req, res) => {
   try {
+    const existing = await Breweries.findOne({
+      where: { refid: req.body.refid, user_id: req.session.user_id },
+    });
+    if (existing) return res.status(409).json({ message: 'Already saved' });
+
     const dbbrewData = await Breweries.create({
       refid: req.body.refid,
       name: req.body.brewname,

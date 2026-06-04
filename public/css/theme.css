@@ -1,0 +1,327 @@
+/* ============================================================
+   LAST CALL — warm-neon theme layer for Local Breweries
+   Drop this in AFTER style.css. It overrides palette + buttons
+   and adds the inline-comment drawer. No markup-breaking changes.
+   Link order in main.handlebars:
+     <link rel="stylesheet" href="/css/style.css" />
+     <link rel="stylesheet" href="/css/theme.css" />   <-- add this
+   ============================================================ */
+
+:root {
+  /* Warm bar-light palette ------------------------------------ */
+  --amber: #ffb43d;          /* primary neon — sodium bar light  */
+  --amber-deep: #ff8c1a;     /* hover / pressed                  */
+  --amber-glow: rgba(255, 180, 61, 0.35);
+  --amber-soft: rgba(255, 180, 61, 0.10);
+
+  --felt: #2fae6e;           /* pool-felt green — map / positive  */
+  --felt-deep: #1f8a55;
+  --felt-glow: rgba(47, 174, 110, 0.30);
+
+  --danger: #e5484d;         /* quiet until hover                 */
+  --danger-soft: rgba(229, 72, 77, 0.12);
+
+  --ink: #0c0a07;            /* near-black bar wood               */
+  --card-bg: #16130d;        /* warmer than the old slate         */
+  --card-edge: rgba(255, 180, 61, 0.14);
+  --text: #f4ede0;           /* warm off-white                    */
+  --text-dim: rgba(244, 237, 224, 0.55);
+
+  /* Re-point legacy vars so old classes inherit the new look ---- */
+  --accent-color: var(--amber);
+  --primary-color: var(--amber);
+  --blue: var(--amber);      /* old glow shadows now read amber   */
+  --light-green: var(--felt);
+  --green: var(--felt-deep);
+}
+
+body { background: var(--ink); color: var(--text); }
+
+/* Headings/hero that were hard-coded blue ---------------------- */
+.hero h1, .hero p,
+.login-title,
+.single-brewery-page > h1,
+.comments-section h3,
+.results-header h2 {
+  color: var(--amber);
+}
+.footer-brand { color: var(--amber); }
+
+/* Footer above bg-grid ::after layer --------------------------- */
+.site-footer {
+  position: relative;
+  z-index: 2;
+}
+
+/* ============================================================
+   NAVBAR — amber theme
+   ============================================================ */
+.navbar.bg-dark {
+  background-color: rgba(12, 10, 7, 0.92) !important;
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 180, 61, 0.18);
+  transition: transform 0.3s ease;
+}
+.navbar.nav-hidden { transform: translateY(-100%); }
+
+.local-brew { color: var(--amber) !important; }
+.local-brew:hover { color: var(--amber-deep) !important; }
+
+.navbar .nav-link {
+  color: rgba(244, 237, 224, 0.75) !important;
+  transition: color 0.15s ease;
+}
+.navbar .nav-link:hover { color: var(--amber) !important; }
+
+#user { color: var(--amber) !important; opacity: 0.85; }
+
+/* Dividers between nav items */
+.navbar-nav .nav-item + .nav-item {
+  position: relative;
+  padding-left: 0.75rem;
+  margin-left: 0.25rem;
+}
+.navbar-nav .nav-item + .nav-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 16px;
+  width: 1px;
+  background: rgba(255, 180, 61, 0.25);
+}
+
+/* Hide empty error bar */
+.error-message:empty { display: none; }
+
+/* Floating label cutout matches auth-form gradient top ---------- */
+.auth-form .form-input:focus + label,
+.auth-form .form-input:not(:placeholder-shown) + label {
+  background: #1a160e;
+}
+
+/* ============================================================
+   CARDS — warmer surface, amber edge glow
+   ============================================================ */
+.brewery-card,
+.hero-card,
+.auth-form {
+  background: linear-gradient(180deg, #1a160e 0%, #14110b 100%);
+  border: 1px solid var(--card-edge);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.5),
+    0 0 26px var(--amber-soft);
+}
+.brewery-card:hover {
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.6),
+    0 0 30px var(--amber-glow);
+}
+
+.brewery-name { color: var(--amber); }
+.brewery-name:hover { color: var(--amber-deep); }
+
+.badge {
+  background: var(--amber-soft);
+  border: 1px solid rgba(255, 180, 61, 0.45);
+  color: var(--amber);
+  animation: none;          /* kill the blue/green pulse          */
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+}
+
+/* ============================================================
+   SEMANTIC BUTTON SYSTEM
+   Hierarchy instead of a color salad.
+   ============================================================ */
+
+/* PRIMARY — Save / Search. The amber money action. */
+.btn-accent,
+.btn-save-brewery,
+#search-btn {
+  background: linear-gradient(180deg, var(--amber) 0%, var(--amber-deep) 100%);
+  color: #1a1208;
+  border: none;
+  font-weight: 700;
+  box-shadow: 0 4px 14px var(--amber-soft);
+}
+.btn-accent:hover,
+.btn-save-brewery:hover,
+#search-btn:hover {
+  background: var(--amber-deep);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px var(--amber-glow);
+}
+
+/* SECONDARY — Visit / Reviews. Ghost outline, no shouting. */
+.btn-outline-primary,
+.visit-btn.btn {
+  background: transparent;
+  border: 1px solid rgba(255, 180, 61, 0.40);
+  color: var(--amber);
+}
+.btn-outline-primary:hover,
+.visit-btn.btn:hover {
+  background: var(--amber-soft);
+  border-color: var(--amber);
+  color: var(--amber);
+  transform: translateY(-1px);
+}
+
+/* MAP — pool-felt green. Spatial + positive, kept distinct. */
+.btn-success,
+.btn-map-saved,
+.btn-map-brewery {
+  background: linear-gradient(180deg, var(--felt) 0%, var(--felt-deep) 100%);
+  border: none;
+  color: #06140d;
+  font-weight: 700;
+}
+.btn-success:hover,
+.btn-map-saved:hover,
+.btn-map-brewery:hover {
+  background: var(--felt-deep);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px var(--felt-glow);
+}
+
+/* COMMENT toggle — muted amber ghost. Lowest-key action. */
+.btn-comment {
+  background: transparent;
+  border: 1px dashed rgba(255, 180, 61, 0.35);
+  color: var(--text-dim);
+  font-weight: 600;
+}
+.btn-comment:hover {
+  border-style: solid;
+  border-color: var(--amber);
+  color: var(--amber);
+  background: var(--amber-soft);
+}
+.btn-comment.is-open {
+  border-style: solid;
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+/* DESTRUCTIVE — Remove. Quiet until you mean it. */
+.btn-danger,
+.btn-delete-brewery {
+  background: var(--danger-soft);
+  border: 1px solid rgba(229, 72, 77, 0.45);
+  color: #ff9a9d;
+  font-weight: 600;
+}
+.btn-danger:hover,
+.btn-delete-brewery:hover {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px var(--danger-soft);
+}
+
+/* Nav logout button picks up the ghost treatment */
+.logout-btn.btn-outline-light {
+  border-color: rgba(255, 180, 61, 0.4);
+  color: var(--amber);
+}
+.logout-btn.btn-outline-light:hover {
+  background: var(--amber-soft);
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+/* Search inputs glow amber on focus --------------------------- */
+.search-form input:focus,
+.form-input:focus {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 3px var(--amber-soft);
+}
+
+/* ============================================================
+   INLINE NOTE DRAWER  (replaces the detail-page round-trip)
+   Collapsed by default; .is-open animates it open.
+   ============================================================ */
+.comment-drawer {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.28s ease, opacity 0.2s ease;
+  overflow: hidden;
+  margin-top: 4px;
+}
+.comment-drawer.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+.comment-drawer__inner {
+  min-height: 0;          /* required for grid 0fr->1fr trick */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 8px;
+}
+.comment-drawer textarea {
+  width: 100%;
+  background: #0e0c08;
+  border: 1px solid rgba(255, 180, 61, 0.25);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 0.7rem;
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  resize: vertical;
+  min-height: 70px;
+}
+.comment-drawer textarea:focus {
+  outline: none;
+  border-color: var(--amber);
+  box-shadow: 0 0 0 3px var(--amber-soft);
+}
+.comment-drawer textarea::placeholder { color: var(--text-dim); }
+
+.comment-drawer__actions {
+  display: flex;
+  gap: 8px;
+}
+.comment-drawer__actions .btn { padding: 7px 14px; font-size: 0.85rem; }
+
+/* Saved note rendered inline on the card */
+.pub-note {
+  background: var(--amber-soft);
+  border-left: 3px solid var(--amber);
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.pub-note__label {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 2px;
+  opacity: 0.8;
+}
+
+/* Read vs edit panes inside the drawer */
+.is-hidden { display: none !important; }
+.comment-read,
+.comment-edit { display: flex; flex-direction: column; gap: 8px; }
+.comment-read .pub-note { margin-top: 0; }
+
+/* Tiny inline toast confirmation for save-in-place */
+.card-flash {
+  font-size: 0.78rem;
+  color: var(--felt);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.card-flash.show { opacity: 1; }
