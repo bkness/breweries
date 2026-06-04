@@ -54,15 +54,67 @@
             >
               See Reviews
             </a>
-            {{#if brewery.comments}}
-              <h3 class='location mt-2'>{{brewery.comments}}</h3>
-            {{/if}}
           </div>
 
           <div class='card-actions mypub-actions mt-3'>
-            <a href='/api/breweries/singlebrewery/{{brewery.id}}' class='save-btn btn btn-warning'>
-              Comment
-            </a>
+            <button
+              type='button'
+              class='btn btn-comment js-comment-toggle'
+              data-id='{{brewery.id}}'
+              data-has-note='{{#if brewery.comments}}1{{else}}0{{/if}}'
+              aria-expanded='false'
+            >
+              {{#if brewery.comments}}📝 View note{{else}}+ Add note{{/if}}
+            </button>
+
+            <div class='comment-drawer' data-id='{{brewery.id}}'>
+              <div class='comment-drawer__inner'>
+
+                <!-- READ mode -->
+                <div class='comment-read js-comment-read{{#unless brewery.comments}} is-hidden{{/unless}}'>
+                  <div class='pub-note'>
+                    <span class='pub-note__label'>Your note</span>
+                    <span class='js-note-text'>{{brewery.comments}}</span>
+                  </div>
+                  <div class='comment-drawer__actions'>
+                    <button
+                      type='button'
+                      class='btn btn-comment btn-sm js-comment-edit'
+                      data-id='{{brewery.id}}'
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </div>
+
+                <!-- EDIT mode -->
+                <div class='comment-edit js-comment-edit-pane{{#if brewery.comments}} is-hidden{{/if}}'>
+                  <textarea
+                    class='js-comment-input'
+                    placeholder='Jot a note about this pub…'
+                    rows='3'
+                  >{{brewery.comments}}</textarea>
+                  <div class='comment-drawer__actions'>
+                    <button
+                      type='button'
+                      class='btn btn-accent btn-sm js-comment-save'
+                      data-id='{{brewery.id}}'
+                    >
+                      Save note
+                    </button>
+                    <button
+                      type='button'
+                      class='btn btn-comment btn-sm js-comment-cancel'
+                      data-id='{{brewery.id}}'
+                    >
+                      Cancel
+                    </button>
+                    <span class='card-flash js-comment-flash'>Saved ✓</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
 
             {{#if brewery.latitude}}
               <button

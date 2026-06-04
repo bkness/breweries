@@ -29,8 +29,7 @@
     "jquery": "^3.7.1",
     "mysql2": "^3.6.5",
     "pg": "^8.21.0",
-    "sequelize": "^6.37.8",
-    "sqlite3": "^5.1.7"
+    "sequelize": "^6.37.8"
   },
   "overrides": {
     "validator": "^13.12.0",
