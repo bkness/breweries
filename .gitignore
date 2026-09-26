@@ -43,3 +43,4 @@ build/
 coverage/
 .nyc_output/
 .cache/
+.vercel
