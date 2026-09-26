@@ -7,6 +7,8 @@ if (!process.env.DATABASE_URL) {
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: 'postgres',
+  // Explicit so bundlers (Vercel) include pg; Sequelize's dynamic require hides it
+  dialectModule: require('pg'),
   dialectOptions: {
     ssl: { require: true, rejectUnauthorized: false },
   },
