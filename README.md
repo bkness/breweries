@@ -79,4 +79,4 @@ ISC
 
 - [Bkness](https://github.com/bkness) — kbrandon863@gmail.com
 
-Deployed app: [Brewery Search](https://brewery-search.onrender.com/)
+Deployed app: [Brewery Search](https://breweries-bkness.vercel.app/)
