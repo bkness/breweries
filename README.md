@@ -73,7 +73,7 @@ Coding BootCamp Curriculum — © 2022 edX Boot Camps LLC. All Rights Reserved.
 
 ## License
 
-ISC
+MIT — see [LICENSE](LICENSE).
 
 ## Contact
 
